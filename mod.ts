@@ -1,13 +1,17 @@
-import { Application } from "./deps.ts";
-import { GUILDS_ROUTER } from "./guilds/mod.ts";
+import { gateway as _, http } from "./config.json" assert { type: "json" };
 
-const app = new Application({ contextState: "alias", state: {} });
+const MESSAGE_CHANNEL = new MessageChannel();
 
-// TODO: Logging middleware
-// TODO: Error handling middleware
-// TODO: Auth middleware
+const HTTP_WORKER = new Worker(new URL("http.ts", import.meta.url), {
+  type: "module",
+  name: "HTTP Worker",
+  deno: http,
+});
 
-app.use(GUILDS_ROUTER.allowedMethods());
-app.use(GUILDS_ROUTER.routes());
+HTTP_WORKER.postMessage(MESSAGE_CHANNEL.port1, [MESSAGE_CHANNEL.port1]);
 
-await app.listen({ port: 8000 });
+// const GATEWAY_WORKER = new Worker(new URL("gateway.ts", import.meta.url), {
+//   type: "module",
+//   name: "GATEWAY Worker",
+//   deno: gateway,
+// });
