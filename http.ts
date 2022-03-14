@@ -6,6 +6,11 @@ const LOGGER = createLogger("http");
 
 const app = new Application({ contextState: "alias", state: {} });
 
+// If this happens then we are genuinely fucked.
+app.addEventListener("error", (x) => {
+  LOGGER.critical(`${x.error} -- ${x.message}`);
+});
+
 app.use(async (ctx, next) => {
   const method = ctx.request.method.toUpperCase();
   const { ip } = ctx.request;
@@ -19,7 +24,6 @@ app.use(async (ctx, next) => {
   await next();
 });
 
-// TODO: Error handling middleware
 // TODO: Auth middleware
 
 app.use(GUILDS_ROUTER.allowedMethods());
