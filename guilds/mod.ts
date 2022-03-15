@@ -1,7 +1,7 @@
 import { Router } from "../deps.ts";
 import { CHANNELS_ROUTER } from "./channels.ts";
 import { MEMBERS_ROUTER } from "./members.ts";
-// import { INVITES_ROUTER } from "./invites.ts";
+import { INVITES_ROUTER } from "./invites.ts";
 
 const GUILDS_ROUTER = new Router({ prefix: "/guilds/:guildID" });
 
@@ -11,5 +11,7 @@ GUILDS_ROUTER.use(CHANNELS_ROUTER.allowedMethods());
 GUILDS_ROUTER.use(CHANNELS_ROUTER.routes());
 GUILDS_ROUTER.use(MEMBERS_ROUTER.allowedMethods());
 GUILDS_ROUTER.use(MEMBERS_ROUTER.routes());
+GUILDS_ROUTER.use(INVITES_ROUTER.allowedMethods());
+GUILDS_ROUTER.use(INVITES_ROUTER.routes());
 
 export { GUILDS_ROUTER };
